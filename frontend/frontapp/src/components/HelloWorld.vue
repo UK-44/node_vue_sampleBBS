@@ -11,6 +11,7 @@
           <input v-model="task.thread_title" type="text" />
         </td>
         <td>
+          a
           <input type="button" value="update" />
         </td>
         <td>
