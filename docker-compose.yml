@@ -1,0 +1,56 @@
+version: "3"
+services:
+  backend:
+    build: backend/.
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
+    command: ["./node_modules/.bin/nodemon", "app"]
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:5.7
+    env_file: ./mysql/mysql.env
+    environment:
+      - TZ=Asia/Tokyo
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d/:ro
+      - mysqldata:/var/lib/mysql
+    networks:
+      - backend
+
+  frontend:
+    build: frontend/.
+    volumes:
+      - ./frontend:/frontend
+    working_dir: /frontend/frontapp
+    command: ["npm", "run", "serve"]
+    ports:
+      - "8080:8080"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=hogepass
+    links:
+      - mysql
+    ports:
+      - 8888:80
+    volumes:
+      - "./phpmyadmin/sessions:/sessions"
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  mysqldata:
