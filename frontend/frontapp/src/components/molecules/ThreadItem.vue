@@ -5,6 +5,19 @@
       <input v-model="currentTask" type="text" />
       <input type="button" value="add!" />
     </form>
+    <table align="center" border="0">
+      <tr v-for="task in tasks" :key="task.thread_id">
+        <td>
+          <input v-model="task.thread_title" type="text" />
+        </td>
+        <td>
+          <input type="button" value="update" />
+        </td>
+        <td>
+          <input type="button" value="delete" />
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 <script>
