@@ -1,61 +1,75 @@
 <template>
-  <div class="hello">
-    <form>
-      <input type="text" style="display: none" />
-      <input v-model="currentTask" type="text" />
-      <input type="button" value="add!" />
-    </form>
-    <table align="center" border="0">
-      <tr v-for="task in tasks" :key="task.thread_id">
-        <td>
-          <input v-model="task.thread_title" type="text" />
-        </td>
-        <td>
-          <input type="button" value="update" />
-        </td>
-        <td>
-          <input type="button" value="delete" />
-        </td>
-      </tr>
-    </table>
+  <div class="thread-item">
+    <div class="thread-item-wrapper">
+      <ul>
+        <li
+          v-for="(category, key) in threadCategories"
+          :key="key"
+          class="thread-item-category"
+        >
+          {{ category }}
+        </li>
+      </ul>
+    </div>
+    <div class="thread-item-wrapper">
+      <p class="thread-item-title">{{ taskItem.threadTitle }}</p>
+    </div>
+    <div class="thread-item-wrapper">
+      <div class="thread-item-info">
+        <span>最終更新：{{ taskItem.updatedAt }}</span>
+        <span>書き込み数：{{ taskItem.updatedAt }}</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import axios from "axios";
 export default {
-  name: "HelloWorld",
+  name: "ThreadItem",
   data: () => ({
-    tasks: [],
-    currentTask: "",
+    threadCategories: [],
   }),
-  created: async function () {
-    try {
-      const result = await axios.get("http://localhost:3000");
-      this.tasks = result.data;
-    } catch (err) {
-      alert(JSON.stringify(err));
-    }
+  props: ["taskItem"],
+  mounted() {
+    this.threadCategories = this.taskItem.threadCategoryName.split(",");
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.thread-item {
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.thread-item-wrapper {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 5px;
 }
-li {
-  margin: 0 10px;
+
+.thread-item-wrapper > ul {
+  display: flex;
+  justify-content: start;
 }
-a {
-  color: #42b983;
+
+.thread-item-category {
+  padding: 2px 10px;
+  margin-right: 5px;
+  border-radius: 15px;
+  background-color: #c8ca2a;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
 }
-.table {
-  height: 100%;
-  text-align: center;
+
+.thread-item-title {
+  font-size: 25px;
+}
+
+.thread-item-info {
+  font-size: 15px;
+  color: #888;
 }
 </style>
