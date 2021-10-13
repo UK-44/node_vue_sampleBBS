@@ -1,29 +1,26 @@
 <template>
-  <div class="hello">
-    <form>
-      <input type="text" style="display: none" />
-      <input v-model="currentTask" type="text" />
-      <input type="button" value="add!" />
-    </form>
-    <table align="center" border="0">
-      <tr v-for="task in tasks" :key="task.thread_id">
-        <td>
-          <input v-model="task.thread_title" type="text" />
-        </td>
-        <td>
-          <input type="button" value="update" />
-        </td>
-        <td>
-          <input type="button" value="delete" />
-        </td>
-      </tr>
-    </table>
+  <div class="home">
+    <div class="wrapper">
+      <form>
+        <input type="text" style="display: none" />
+        <input v-model="currentTask" type="text" />
+        <input type="button" value="add!" />
+      </form>
+      <div class="thread-items-wrapper">
+        <ThreadItems :all_tasks="tasks" />
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import ThreadItems from "../organisms/ThreadItems";
+
 export default {
-  name: "HelloWorld",
+  name: "Home",
+  components: {
+    ThreadItems,
+  },
   data: () => ({
     tasks: [],
     currentTask: "",
@@ -35,6 +32,11 @@ export default {
     } catch (err) {
       alert(JSON.stringify(err));
     }
+  },
+  provide() {
+    return {
+      providedData: this.provideData,
+    };
   },
 };
 </script>
@@ -57,5 +59,11 @@ a {
 .table {
   height: 100%;
   text-align: center;
+}
+
+.thread-items-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 </style>
